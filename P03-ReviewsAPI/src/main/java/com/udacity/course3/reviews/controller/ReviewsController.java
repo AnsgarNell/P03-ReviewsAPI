@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 public class ReviewsController {
 
-    // TODO: Wire JPA repositories here
+    // Wire JPA repositories here
     @Autowired
     ReviewRepository reviewRepository;
     @Autowired

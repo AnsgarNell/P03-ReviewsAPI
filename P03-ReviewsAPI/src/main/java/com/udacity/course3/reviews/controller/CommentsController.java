@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequestMapping("/comments")
 public class CommentsController {
 
-    // TODO: Wire needed JPA repositories here
+    // Wire needed JPA repositories here
     @Autowired
     CommentRepository commentRepository;
     @Autowired
