@@ -43,7 +43,7 @@ public class ProductsControllerTest {
     private JacksonTester<Product> json;
 
     @MockBean
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
