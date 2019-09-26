@@ -1,11 +1,16 @@
 package com.udacity.course3.reviews.controller;
 
+import com.udacity.course3.reviews.entity.Product;
+import com.udacity.course3.reviews.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring REST controller for working with product entity.
@@ -15,6 +20,8 @@ import java.util.List;
 public class ProductsController {
 
     // TODO: Wire JPA repositories here
+    @Autowired
+    ProductRepository productRepository;
 
     /**
      * Creates a product.
@@ -24,8 +31,8 @@ public class ProductsController {
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct() {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+    public void createProduct(@Valid @RequestBody Product product) {
+        productRepository.save(product);
     }
 
     /**
@@ -36,7 +43,11 @@ public class ProductsController {
      */
     @RequestMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            return ResponseEntity.ok(optionalProduct.get());
+        }
+        else throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -46,6 +57,6 @@ public class ProductsController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<?> listProducts() {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+        return productRepository.findAll();
     }
 }
