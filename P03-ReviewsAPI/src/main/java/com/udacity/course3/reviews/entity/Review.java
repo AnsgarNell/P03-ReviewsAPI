@@ -13,10 +13,14 @@ public class Review {
     private Timestamp createdTs;
     private boolean recommended;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public Review() {
+    }
+
+    public Review(Product product) {
+        this.product = product;
     }
 
     public Review(String title, String review_text, Timestamp createdTs, boolean recommended, Product productId) {

@@ -12,10 +12,14 @@ public class Comment {
     private String commentText;
     private Timestamp createdTs;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "review_id")
     private Review review;
 
     public Comment() {
+    }
+
+    public Comment(Review review) {
+        this.review = review;
     }
 
     public Comment(String title, String commentText, Timestamp createdTs, Review reviewId) {
