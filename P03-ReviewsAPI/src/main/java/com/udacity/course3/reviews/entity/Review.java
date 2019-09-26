@@ -23,12 +23,12 @@ public class Review {
         this.product = product;
     }
 
-    public Review(String title, String review_text, Timestamp createdTs, boolean recommended, Product productId) {
+    public Review(String title, String review_text, Timestamp createdTs, boolean recommended, Product product) {
         this.title = title;
         this.review_text = review_text;
         this.createdTs = createdTs;
         this.recommended = recommended;
-        this.product = productId;
+        this.product = product;
     }
 
     public Integer getId() {
