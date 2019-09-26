@@ -60,10 +60,10 @@ public class CommentsController {
      * @param reviewId The id of the review.
      */
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
-    public List<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
+    public ResponseEntity<List<?>> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (optionalReview.isPresent()) {
-            return commentRepository.findAllByReview(optionalReview.get());
+            return ResponseEntity.ok(commentRepository.findAllByReview(optionalReview.get()));
         }
         else throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
     }
