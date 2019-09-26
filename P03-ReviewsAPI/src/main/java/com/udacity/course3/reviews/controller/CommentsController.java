@@ -44,7 +44,6 @@ public class CommentsController {
         if (optionalReview.isPresent()) {
             comment.setReview(optionalReview.get());
             commentRepository.save(comment);
-            System.out.println(ResponseEntity.ok(comment).toString());
             return ResponseEntity.ok(comment);
         }
         else throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
@@ -63,8 +62,7 @@ public class CommentsController {
     public List<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (optionalReview.isPresent()) {
-            // return list of comments.
-
+            return commentRepository.findAllByReview(optionalReview.get());
         }
         else throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
     }
