@@ -43,6 +43,7 @@ public class ReviewsController {
         if (optionalProduct.isPresent()) {
             review.setProduct(optionalProduct.get());
             reviewRepository.save(review);
+            return ResponseEntity.ok(review);
         }
         else throw new HttpServerErrorException(HttpStatus.NOT_FOUND);
     }
