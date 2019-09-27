@@ -111,7 +111,7 @@ public class ProductsControllerTest {
         assert (productJson.equals(responseProductJson));
     }
 
-    private Product getProduct() {
+    public static Product getProduct() {
         Product product = new Product();
         product.setName("Product");
         product.setDescription("This is the description of the product.");

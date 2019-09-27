@@ -6,7 +6,6 @@ import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.repository.CommentRepository;
-import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +23,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,20 +53,27 @@ public class CommentsControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static Product product;
+    private static Review review;
+
     /**
      * Creates pre-requisites for testing, such as an example comment.
      */
     @Before
     public void setup() {
-        Review review = getReview();
+        // Should be product = mock(Product.class); but it only works with real objects
+        product = ProductsControllerTest.getProduct();
+
+        // Should be review = mock(Review.class); but it only works with real objects
+        review = ReviewsControllerTest.getReview();
+
+        review.setProduct(product);
         given(reviewRepository.findById(any())).willReturn(java.util.Optional.of(review));
+
         Comment comment = getComment();
-        comment.setReview(review);
-        Comment comment1 = getComment();
-        comment1.setReview(review);
         given(commentRepository.save(any())).willReturn(comment);
         given(commentRepository.findById(any())).willReturn(java.util.Optional.of(comment));
-        given(commentRepository.findAll()).willReturn(Collections.singletonList(comment));
+        given(commentRepository.findAllByReview(any())).willReturn(Collections.singletonList(comment));
     }
 
     /**
@@ -87,8 +92,8 @@ public class CommentsControllerTest {
     }
 
     /**
-     * Tests for getting products list from the system
-     * @throws Exception when product retrieve fails in the system
+     * Tests for getting comments list from the system
+     * @throws Exception when comments retrieve fails in the system
      */
     @Test
     public void listComments() throws Exception {
@@ -104,17 +109,11 @@ public class CommentsControllerTest {
         assert (commentJson.equals(responseCommentJson));
     }
 
-    private Comment getComment() {
+    public static  Comment getComment() {
         Comment comment = new Comment();
         comment.setTitle("Comment Title");
         comment.setCommentText("Comment Text");
-        Review review = getReview();
         comment.setReview(review);
         return comment;
-    }
-
-    private Review getReview() {
-        Product product = new Product("Product name", "Product description");
-        return new Review("Review title", "Review text", null, true, product);
     }
 }
