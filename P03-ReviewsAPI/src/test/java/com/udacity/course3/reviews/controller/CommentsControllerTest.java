@@ -61,7 +61,6 @@ public class CommentsControllerTest {
     @Before
     public void setup() {
         Review review = getReview();
-        review.setId(1);
         given(reviewRepository.findById(any())).willReturn(java.util.Optional.of(review));
         Comment comment = getComment();
         comment.setReview(review);
