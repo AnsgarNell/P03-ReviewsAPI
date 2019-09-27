@@ -30,9 +30,9 @@ public class ProductsController {
      * 2. Save product.
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody Product product) {
         productRepository.save(product);
+        return ResponseEntity.ok(product);
     }
 
     /**
