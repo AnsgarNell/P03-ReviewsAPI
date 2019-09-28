@@ -1,6 +1,8 @@
 package com.udacity.course3.reviews.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Entity
@@ -8,11 +10,14 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotNull
+    @NotEmpty
     private String title;
     private String commentText;
     private Timestamp createdTs;
     @ManyToOne
     @JoinColumn(name = "review_id")
+    @NotNull
     private Review review;
 
     public Comment() {
