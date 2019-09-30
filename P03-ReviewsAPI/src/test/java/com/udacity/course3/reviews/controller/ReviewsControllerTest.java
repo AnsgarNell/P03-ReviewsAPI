@@ -2,8 +2,10 @@ package com.udacity.course3.reviews.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.udacity.course3.reviews.entity.MongoReview;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.junit.Before;
@@ -41,10 +43,13 @@ public class ReviewsControllerTest {
     private MockMvc mvc;
 
     @Autowired
-    private JacksonTester<Review> json;
+    private JacksonTester<MongoReview> json;
 
     @MockBean
     private ReviewRepository reviewRepository;
+
+    @MockBean
+    private MongoReviewRepository mongoReviewRepository;
 
     @MockBean
     private ProductRepository productRepository;
@@ -65,6 +70,16 @@ public class ReviewsControllerTest {
         Review review = getReview();
         given(reviewRepository.findById(any())).willReturn(java.util.Optional.of(review));
         given(reviewRepository.findAllByProduct(any())).willReturn(Collections.singletonList(review));
+
+        MongoReview mongoReview = new MongoReview();
+        review.setId(1);
+        mongoReview.setId(review.getId().toString());
+        mongoReview.setCreatedTs(review.getCreatedTs());
+        mongoReview.setProduct(review.getProduct());
+        mongoReview.setRecommended(review.isRecommended());
+        mongoReview.setReview_text(review.getReview_text());
+        mongoReview.setTitle(review.getTitle());
+        given(mongoReviewRepository.findById(any())).willReturn(java.util.Optional.of(mongoReview));
     }
 
     /**
@@ -74,9 +89,19 @@ public class ReviewsControllerTest {
     @Test
     public void createReview() throws Exception {
         Review review = getReview();
+
+        MongoReview mongoReview = new MongoReview();
+        review.setId(1);
+        mongoReview.setId(review.getId().toString());
+        mongoReview.setCreatedTs(review.getCreatedTs());
+        mongoReview.setProduct(review.getProduct());
+        mongoReview.setRecommended(review.isRecommended());
+        mongoReview.setReview_text(review.getReview_text());
+        mongoReview.setTitle(review.getTitle());
+
         mvc.perform(
                 post(new URI("/reviews/products/1"))
-                        .content(json.write(review).getJson())
+                        .content(json.write(mongoReview).getJson())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
@@ -90,14 +115,24 @@ public class ReviewsControllerTest {
     @Test
     public void listComments() throws Exception {
         Review review = getReview();
+
+        MongoReview mongoReview = new MongoReview();
+        review.setId(1);
+        mongoReview.setId(review.getId().toString());
+        mongoReview.setCreatedTs(review.getCreatedTs());
+        mongoReview.setProduct(review.getProduct());
+        mongoReview.setRecommended(review.isRecommended());
+        mongoReview.setReview_text(review.getReview_text());
+        mongoReview.setTitle(review.getTitle());
+
         ResultActions resultActions = mvc.perform(get("/reviews/products/1"))
                 .andExpect(status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
-        List<Review> responseReviewList = objectMapper.readValue(contentAsString, new TypeReference<List<Review>>(){});
+        List<MongoReview> responseReviewList = objectMapper.readValue(contentAsString, new TypeReference<List<MongoReview>>(){});
         String responseReviewJson = json.write(responseReviewList.get(0)).getJson();
-        String commentJson = json.write(review).getJson();
+        String commentJson = json.write(mongoReview).getJson();
         assert (commentJson.equals(responseReviewJson));
     }
 
