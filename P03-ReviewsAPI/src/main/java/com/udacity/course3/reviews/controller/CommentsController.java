@@ -1,6 +1,7 @@
 package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Comment;
+import com.udacity.course3.reviews.entity.MongoComment;
 import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.repository.CommentRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
